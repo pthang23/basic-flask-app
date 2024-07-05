@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 from flask import Flask, jsonify
 from flask_smorest import Api
@@ -16,6 +17,8 @@ from resources.user import blp as UserBlueprint
 def create_app(db_url=None):
     app = Flask(__name__)
 
+    load_dotenv()
+
     app.config['PROPAGATE_EXCEPTION'] = True
     app.config['API_TITLE'] = 'Stores REST API'
     app.config['API_VERSION'] = 'v1'
@@ -27,8 +30,8 @@ def create_app(db_url=None):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
 
     migrate = Migrate(app, db)
 
